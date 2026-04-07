@@ -3,27 +3,16 @@
 <head>
   <title>GameNova</title>
 </head>
-<body style="text-align:center; font-family:sans-serif;">
-  <h1>Tap Fast!</h1>
+<body style="text-align:center;">
+  <h1>Tap Fast Game 🎮</h1>
   <h2 id="score">0</h2>
   <button onclick="tap()">TAP</button>
 
   <script>
     let score = 0;
-
     function tap() {
       score++;
       document.getElementById("score").innerText = score;
-    }
-
-    setTimeout(() => {
-      sendScore(score);
-    }, 10000); // 10 sec game
-
-    function sendScore(finalScore) {
-      if (window.TelegramGameProxy) {
-        TelegramGameProxy.postEvent("score", finalScore);
-      }
     }
   </script>
 </body>
