@@ -1,5 +1,6 @@
-from flask import Flask, request
-from pyrogram import Client
+from flask import Flask
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import os
 
 app = Flask(__name__)
@@ -11,15 +12,18 @@ bot = Client(
     bot_token=os.environ.get("BOT_TOKEN")
 )
 
+@bot.on_message(filters.command("start"))
+async def start(client, message):
+    await message.reply_text(
+        "🎮 Play NovaGame Lumberjack!",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("Play 🎮", callback_game="NovaGame")]
+        ])
+    )
+
 @app.route("/")
 def home():
-    return "GameNova Running ✅"
-
-@app.route("/score", methods=["POST"])
-def score():
-    data = request.json
-    print("Score Data:", data)
-    return {"ok": True}
+    return "Game running!"
 
 if __name__ == "__main__":
     bot.start()
