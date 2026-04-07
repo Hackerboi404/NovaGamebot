@@ -1,19 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GameNova</title>
+  <title>GameNova Lumberjack</title>
+  <style>
+    body { text-align:center; font-family:sans-serif; background:#222; color:white; }
+    #player { font-size:50px; }
+    button { padding:15px; font-size:20px; margin:10px; }
+  </style>
 </head>
-<body style="text-align:center;">
-  <h1>Tap Fast Game 🎮</h1>
-  <h2 id="score">0</h2>
-  <button onclick="tap()">TAP</button>
+<body>
 
-  <script>
-    let score = 0;
-    function tap() {
-      score++;
-      document.getElementById("score").innerText = score;
-    }
-  </script>
+<h1>🌳 Lumberjack Game</h1>
+<h2 id="score">Score: 0</h2>
+<div id="player">🧍</div>
+
+<button onclick="cut('left')">⬅️ LEFT</button>
+<button onclick="cut('right')">➡️ RIGHT</button>
+
+<script>
+let score = 0;
+let side = "left";
+let gameOver = false;
+
+// random branch
+function randomBranch() {
+  return Math.random() < 0.5 ? "left" : "right";
+}
+
+let branch = randomBranch();
+
+function cut(dir) {
+  if (gameOver) return;
+
+  // if branch same side → game over
+  if (dir === branch) {
+    endGame();
+    return;
+  }
+
+  score++;
+  document.getElementById("score").innerText = "Score: " + score;
+
+  // new branch
+  branch = randomBranch();
+}
+
+// end game
+function endGame() {
+  gameOver = true;
+  alert("Game Over! Score: " + score);
+
+  sendScore(score);
+}
+
+// Telegram score send
+function sendScore(finalScore) {
+  if (window.TelegramGameProxy) {
+    TelegramGameProxy.postEvent("score", finalScore);
+  }
+}
+</script>
+
 </body>
 </html>
